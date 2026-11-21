@@ -78,3 +78,59 @@ contactForm.addEventListener("submit", function (event) {
         contactForm.reset();
     }
 });
+
+
+/*github API integration*/
+const githubRepos = document.getElementById("github-repos");
+const githubStatus = document.getElementById("github-status");
+
+async function loadGitHubRepos() {
+    githubStatus.textContent = "Loading repositories...";
+
+    try {
+        const response = await fetch(
+            "https://api.github.com/users/lluja1n/repos?sort=updated&per_page=6"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch repositories");
+        }
+
+        const repos = await response.json();
+        githubRepos.replaceChildren();
+
+        if (repos.length === 0) {
+            githubStatus.textContent = "No public repositories found.";
+            return;
+        }
+
+        repos.forEach(function (repo) {
+            const card = document.createElement("div");
+            card.className = "github-card";
+
+            const title = document.createElement("h3");
+            title.textContent = repo.name;
+
+            const description = document.createElement("p");
+            description.textContent =
+                repo.description || "No description available.";
+
+            const link = document.createElement("a");
+            link.href = repo.html_url;
+            link.textContent = "View Repository";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+
+            card.append(title, description, link);
+            githubRepos.appendChild(card);
+        });
+
+        githubStatus.textContent = "";
+    } catch (error) {
+        githubStatus.textContent =
+            "Unable to load repositories. Please try again later.";
+    }
+}
+
+loadGitHubRepos();
+
