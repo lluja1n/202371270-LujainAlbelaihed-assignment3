@@ -1,21 +1,32 @@
 const themeButton = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
+
+function updateTheme() {
+    const isDark = document.body.classList.contains("dark-mode");
+
+    themeIcon.textContent = isDark ? "☀" : "☾";
+    themeButton.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
+    themeButton.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+}
 
 if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark-mode");
-    themeButton.textContent = "Light Mode";
 }
+
+updateTheme();
 
 themeButton.addEventListener("click", function () {
     document.body.classList.toggle("dark-mode");
 
-    if (document.body.classList.contains("dark-mode")) {
-        themeButton.textContent = "Light Mode";
-        localStorage.setItem("theme", "dark");
-    } else {
-        themeButton.textContent = "Dark Mode";
-        localStorage.setItem("theme", "light");
-    }
+    const isDark = document.body.classList.contains("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    updateTheme();
 });
+
 
 const backToTopButton = document.getElementById("back-to-top");
 
@@ -41,7 +52,17 @@ const projectsContainer = document.getElementById("projects");
 const projects = Array.from(document.querySelectorAll(".project"));
 const sortSelect = document.getElementById("sort-projects");
 
-let selectedFilter = "all";
+let selectedFilter = localStorage.getItem("projectFilter") || "all";
+
+if (!["all", "software", "hardware"].includes(selectedFilter)) {
+    selectedFilter = "all";
+}
+
+const savedSort = localStorage.getItem("projectSort");
+
+if (["default", "az", "za"].includes(savedSort)) {
+    sortSelect.value = savedSort;
+}
 
 function updateProjects() {
     const sortOrder = sortSelect.value;
@@ -75,10 +96,14 @@ function updateProjects() {
     });
 }
 
-
 filterButtons.forEach(function (button) {
+    if (button.dataset.filter === selectedFilter) {
+        button.classList.add("active");
+    }
+
     button.addEventListener("click", function () {
         selectedFilter = button.dataset.filter;
+        localStorage.setItem("projectFilter", selectedFilter);
 
         filterButtons.forEach(function (btn) {
             btn.classList.remove("active");
@@ -89,11 +114,12 @@ filterButtons.forEach(function (button) {
     });
 });
 
-/* Set All as the default selected filter */
-document.querySelector('[data-filter="all"]').classList.add("active");
+sortSelect.addEventListener("change", function () {
+    localStorage.setItem("projectSort", sortSelect.value);
+    updateProjects();
+});
 
-
-sortSelect.addEventListener("change", updateProjects);
+updateProjects();
 
 
 const contactForm = document.getElementById("contact-form");
@@ -123,7 +149,7 @@ contactForm.addEventListener("submit", function (event) {
 });
 
 
-/*github API integration*/
+/* GitHub API Integration */
 const githubRepos = document.getElementById("github-repos");
 const githubStatus = document.getElementById("github-status");
 
@@ -176,4 +202,3 @@ async function loadGitHubRepos() {
 }
 
 loadGitHubRepos();
-
