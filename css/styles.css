@@ -332,3 +332,46 @@ body.dark-mode .github-card {
 body.dark-mode .github-card a {
     color: #f4e9f0;
 }
+
+/* Project Sorting */
+.project-sorting {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.project-sorting select {
+    padding: 10px;
+    border: 1px solid #c6a0b4;
+    border-radius: 5px;
+    background-color: #fffafb;
+    color: #49303b;
+    font-family: inherit;
+}
+
+body.dark-mode .project-sorting select {
+    background-color: #382b3d;
+    color: #f4e9f0;
+    border-color: #59455d;
+}
+
+/* Selected Project Filter */
+.project-filters button.active {
+    background-color: #a5b49a;
+    color: #293529;
+    border-color: #a5b49a;
+}
+
+body.dark-mode .project-filters button.active {
+    background-color: #a5b49a;
+    color: #293529;
+    border-color: #a5b49a;
+}
+
+.project-filters button.active:hover,
+body.dark-mode .project-filters button.active:hover {
+    background-color: #a5b49a;
+    color: #293529;
+}

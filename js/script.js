@@ -34,24 +34,67 @@ backToTopButton.addEventListener("click", function () {
     });
 });
 
+
+/* Project Filtering and Sorting */
 const filterButtons = document.querySelectorAll(".project-filters button");
-const projects = document.querySelectorAll(".project");
+const projectsContainer = document.getElementById("projects");
+const projects = Array.from(document.querySelectorAll(".project"));
+const sortSelect = document.getElementById("sort-projects");
+
+let selectedFilter = "all";
+
+function updateProjects() {
+    const sortOrder = sortSelect.value;
+
+    const sortedProjects = [...projects];
+
+    if (sortOrder === "az") {
+        sortedProjects.sort(function (a, b) {
+            return a.querySelector("h3").textContent.localeCompare(
+                b.querySelector("h3").textContent
+            );
+        });
+    } else if (sortOrder === "za") {
+        sortedProjects.sort(function (a, b) {
+            return b.querySelector("h3").textContent.localeCompare(
+                a.querySelector("h3").textContent
+            );
+        });
+    }
+
+    sortedProjects.forEach(function (project) {
+        const categories = project.dataset.category.split(" ");
+
+        if (selectedFilter === "all" || categories.includes(selectedFilter)) {
+            project.style.display = "";
+        } else {
+            project.style.display = "none";
+        }
+
+        projectsContainer.appendChild(project);
+    });
+}
+
 
 filterButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-        const selectedFilter = button.dataset.filter;
+        selectedFilter = button.dataset.filter;
 
-        projects.forEach(function (project) {
-            const categories = project.dataset.category.split(" ");
-
-            if (selectedFilter === "all" || categories.includes(selectedFilter)) {
-                project.style.display = "";
-            } else {
-                project.style.display = "none";
-            }
+        filterButtons.forEach(function (btn) {
+            btn.classList.remove("active");
         });
+
+        button.classList.add("active");
+        updateProjects();
     });
 });
+
+/* Set All as the default selected filter */
+document.querySelector('[data-filter="all"]').classList.add("active");
+
+
+sortSelect.addEventListener("change", updateProjects);
+
 
 const contactForm = document.getElementById("contact-form");
 const formFeedback = document.getElementById("form-feedback");
