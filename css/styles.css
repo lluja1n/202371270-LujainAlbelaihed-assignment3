@@ -158,7 +158,6 @@ form button {
     color: #293529;
 }
 
-
 #theme-toggle {
     position: absolute;
     top: 20px;
@@ -180,7 +179,6 @@ form button {
     font-size: 23px;
     line-height: 1;
 }
-
 
 /* Form feedback */
 #form-feedback {
@@ -312,7 +310,7 @@ form button,
     }
 }
 
-/*github repositories*/
+/* GitHub repositories */
 #github-repos {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
@@ -391,4 +389,25 @@ body.dark-mode .project-filters button.active {
 body.dark-mode .project-filters button.active:hover {
     background-color: #a5b49a;
     color: #293529;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    body,
+    header,
+    nav a,
+    .project,
+    #skills li,
+    .project-filters button,
+    #theme-toggle,
+    form input,
+    form textarea,
+    form button,
+    #back-to-top {
+        transition: none;
+    }
 }

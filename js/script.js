@@ -66,7 +66,6 @@ if (["default", "az", "za"].includes(savedSort)) {
 
 function updateProjects() {
     const sortOrder = sortSelect.value;
-
     const sortedProjects = [...projects];
 
     if (sortOrder === "az") {
@@ -122,6 +121,7 @@ sortSelect.addEventListener("change", function () {
 updateProjects();
 
 
+/* Contact Form Validation */
 const contactForm = document.getElementById("contact-form");
 const formFeedback = document.getElementById("form-feedback");
 
@@ -166,9 +166,10 @@ async function loadGitHubRepos() {
         }
 
         const repos = await response.json();
-        githubRepos.replaceChildren();
+        const fragment = document.createDocumentFragment();
 
         if (repos.length === 0) {
+            githubRepos.replaceChildren();
             githubStatus.textContent = "No public repositories found.";
             return;
         }
@@ -191,10 +192,12 @@ async function loadGitHubRepos() {
             link.rel = "noopener noreferrer";
 
             card.append(title, description, link);
-            githubRepos.appendChild(card);
+            fragment.appendChild(card);
         });
 
+        githubRepos.replaceChildren(fragment);
         githubStatus.textContent = "";
+
     } catch (error) {
         githubStatus.textContent =
             "Unable to load repositories. Please try again later.";
